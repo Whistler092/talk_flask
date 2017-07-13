@@ -8,7 +8,7 @@ class Lic(db.Model):
     __tablename__ = 'lics'
 
     id = Column(Integer, primary_key=True)
-    serial = Column(String(64), index=True)
+    serial = Column(String(64), index=True, nullable=False)
     name = Column(String(64), nullable=False)
     status = Column(Boolean)
     support_date = Column(Date, default=func.now())

@@ -2,36 +2,34 @@ import sys
 from flask import Flask, jsonify, request, url_for
 from models import db, Lic
 from datetime import date
+from schemas import ma, lic_schema, lic_schema_light
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///lics.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db.init_app(app)
+ma.init_app(app)
 
 
-@app.route("/<serial>")
+@app.route("/<serial>", methods=["GET"])
 def get_lic(serial):
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
-    output = {
-        "name": lic.name,
-        "support_date": lic.support_date,
-    }
-    return jsonify(output)
+
+    #return lic_schema.jsonify(lic)
+    return lic_schema_light.jsonify(lic)
 
 
 @app.route("/", methods=["POST"])
 def create_lic():
     # validamos los campos importantes
 
-    if "name" not in request.json:
-        return "name required", 400
+    lic, errors = lic_schema.load(request.json)
+    if errors:
+        resp = jsonify(errors)
+        resp.status_code = 400
+        return resp
 
-    if "serial" not in request.json:
-        return "serial required", 400
-
-    # Se crea el objeto Lic
-    lic = Lic(name=request.json["name"], serial=request.json["serial"],
-              status=True)
+    lic.status = 1
     db.session.add(lic)
     db.session.commit()
 
