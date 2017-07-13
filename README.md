@@ -10,7 +10,7 @@ charla introductoria de flask
     python run.py
 ```
 
-Cambiar de un array a un diccionario. 
+Cambiar de un array a un diccionarios.  
 
 -> http://127.0.0.1:5000/Q9KF-9UBT-6XEO
 
