@@ -2,16 +2,40 @@
 charla introductoria de flask
 
 ```
-    pip install virtualenv
-    virtualenv -p python3.6 env3
-    source env3/bin/activate
-    pip install flask
-        pip install -r requirements.txt
+    
+
+    Flask-SQLAlchemy
+
+    pip install -r requirements.txt
     python run.py
 ```
 
-Cambiar de un array a un diccionarios.  
+Agregar SQLAlchemy
+    
+    -> Separamos el api en partes, esta separación hace más facil pensar 
+    cada una de ellas en partes diferentes y así podremos ver como se 
+    combinan entre si.
+    
+    -->Views: Como la información es presentada en el API
+    -->Data: es la información que el api provee, separamos data en models.py
 
--> http://127.0.0.1:5000/Q9KF-9UBT-6XEO
+    Object Relational Mappers
+
+    Es estandar y puede guardar datos en la base de datos que uno quiera. Python tiene varios ORMs, pero uno de los mejores es SQL Alchemy, con la extensión Flask-SQLAlchemy
+
+    Definiendo el Modelo
+
+    Integrando Flask-SQLAlchemy
+        db.init_app(app)
+        sqlite
+
+    query
+        Lic.query.filter(Lic.serial==serial)
+
+        python run.py createdb
+
+        python run.py loaddata
 
 
+
+    
