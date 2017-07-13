@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, url_for
 from models import db, Lic
 from datetime import date
 
@@ -17,6 +17,31 @@ def get_lic(serial):
         "support_date": lic.support_date,
     }
     return jsonify(output)
+
+
+@app.route("/", methods=["POST"])
+def create_lic():
+    # validamos los campos importantes
+
+    if "name" not in request.json:
+        return "name required", 400
+
+    if "serial" not in request.json:
+        return "serial required", 400
+
+    # Se crea el objeto Lic
+    lic = Lic(name=request.json["name"], serial=request.json["serial"],
+              status=True)
+    db.session.add(lic)
+    db.session.commit()
+
+    # Return HTTP
+    location = url_for("get_lic", serial=request.json["serial"])
+    response = jsonify({"message": "Licencia creada correctamente"})
+    response.status_code = 201
+    response.headers["Location"] = location
+
+    return response
 
 
 if __name__ == "__main__":
