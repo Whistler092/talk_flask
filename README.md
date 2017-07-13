@@ -37,5 +37,11 @@ Agregar SQLAlchemy
         python run.py loaddata
 
 
+200 -> http://127.0.0.1:5000/W98T-OFKX-QXDF
+
+404 -> http://127.0.0.1:5000/W98T-OFKX
+
+
+SQLALCHEMY_TRACK_MODIFICATIONS	If set to True, Flask-SQLAlchemy will track modifications of objects and emit signals. The default is None, which enables tracking but issues a warning that it will be disabled by default in the future. This requires extra memory and should be disabled if not needed.
 
     
