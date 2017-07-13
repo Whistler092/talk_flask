@@ -9,3 +9,9 @@ charla introductoria de flask
         pip install -r requirements.txt
     python run.py
 ```
+
+Cambiar de un array a un diccionario. 
+
+-> http://127.0.0.1:5000/Q9KF-9UBT-6XEO
+
+
