@@ -44,6 +44,32 @@ def create_lic():
     return response
 
 
+@app.route("/", methods=["PUT"])
+def update_lic():
+    # validamos los campos importantes
+
+    if "name" not in request.json:
+        return "name required", 400
+
+    if "serial" not in request.json:
+        return "serial required", 400
+
+    # Se crea el objeto Lic
+    lic = Lic.query.filter(Lic.serial == request.json["serial"]).first()
+    lic.name = request.json["name"]
+
+    db.session.add(lic)
+    db.session.commit()
+
+    # Return HTTP
+    location = url_for("get_lic", serial=request.json["serial"])
+    response = jsonify({"message": "Licencia actualizada correctamente"})
+    response.status_code = 201
+    response.headers["Location"] = location
+
+    return response
+
+
 if __name__ == "__main__":
     if "createdb" in sys.argv:
         with app.app_context():
