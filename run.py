@@ -34,7 +34,7 @@ lics = {
 def get_lic(key_word):
     try:
         lic = lics[key_word]
-    except IndexError:
+    except KeyError:
         abort(404)
     return jsonify(lic)
 
