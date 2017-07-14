@@ -30,7 +30,7 @@ lics = {
 }
 
 
-@app.route("/<key_word>")
+@app.route("/<string:key_word>")
 def get_lic(key_word):
     try:
         lic = lics[key_word]
