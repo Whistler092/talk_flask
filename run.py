@@ -11,6 +11,10 @@ db.init_app(app)
 
 @app.route("/<serial>")
 def get_lic(serial):
+    # lics = Lic.query.all()        Retorna una list
+    # lic = Lic.query.filter(Lic.serial=="CYIZ-55IA-TVI8").first() Primera licencia que encuentre o None
+    # lic = Lic.query.filter_by(Lic.serial=="CYIZ-55IA-TVI8").first() filter_by shortcut
+
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
     output = {
         "name": lic.name,
