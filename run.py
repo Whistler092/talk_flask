@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def init():
-    return "Hola Python Cali!"
+    return "<h1>Hola Python Cali!</h1>"
 
 
 if __name__ == "__main__":
