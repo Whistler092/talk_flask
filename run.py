@@ -2,7 +2,7 @@ import sys
 from flask import Flask, jsonify, request, url_for
 from models import db, Lic
 from datetime import date
-from schemas import ma, lic_schema, lic_schema_light
+from schemas import ma, lic_schema, lic_schema_light, lic_schemas
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///lics.db"
@@ -11,19 +11,25 @@ db.init_app(app)
 ma.init_app(app)
 
 
-@app.route("/<serial>", methods=["GET"])
+@app.route("/lics/<serial>", methods=["GET"])
 def get_lic(serial):
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
-
-    # return lic_schema.jsonify(lic)
+    # Si hubiera sido un ID
+    # lic = Lic.query.first_or_404(id)
     return lic_schema_light.jsonify(lic)
 
 
-@app.route("/", methods=["POST"])
+@app.route("/lics/", methods=["GET"])
+def list_lics():
+    all_lics = Lic.query.all()
+    return lic_schemas.jsonify(all_lics)
+
+
+@app.route("/lics/", methods=["POST"])
 def create_lic():
     # validamos los campos importantes
 
-    lic, errors = lic_schema.load(request.json)
+    lic, errors = lic_schema_light.load(request.json)
     if errors:
         resp = jsonify(errors)
         resp.status_code = 400
@@ -34,15 +40,14 @@ def create_lic():
     db.session.commit()
 
     # Return HTTP
-    location = url_for("get_lic", serial=request.json["serial"])
+    # location = url_for("get_lic", serial=request.json["serial"])
     response = jsonify({"message": "Licencia creada correctamente"})
     response.status_code = 201
-    response.headers["Location"] = location
-
+    response.headers["Location"] = lic.url
     return response
 
 
-@app.route("/<serial>", methods=["PUT"])
+@app.route("/lics/<serial>", methods=["PUT"])
 def update_lic(serial):
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
     lic, errors = lic_schema.load(request.json, instance=lic)
@@ -55,15 +60,15 @@ def update_lic(serial):
     db.session.commit()
 
     # Return HTTP
-    location = url_for("get_lic", serial=lic.serial)
+    # location = url_for("get_lic", serial=lic.serial)
     response = jsonify({"message": "Licencia actualizada correctamente"})
     response.status_code = 201
-    response.headers["Location"] = location
+    response.headers["Location"] = lic.url
 
     return response
 
 
-@app.route("/<serial>", methods=["DELETE"])
+@app.route("/lics/<serial>", methods=["DELETE"])
 def delete_lic(serial):
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
 
@@ -71,6 +76,18 @@ def delete_lic(serial):
     db.session.commit()
 
     return jsonify({"message": "Licencia eliminada correctamente"})
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """
+    Source http://flask.pocoo.org/docs/0.12/patterns/errorpages/
+    :param error:
+    :return:
+    """
+    resp = jsonify({"error": "not found"})
+    resp.status_code = 404
+    return resp
 
 
 if __name__ == "__main__":

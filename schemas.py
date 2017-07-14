@@ -13,7 +13,7 @@ class LicSchema(ma.ModelSchema):
 class LicSchemaLight(ma.ModelSchema):
     class Meta:
         model = Lic
-        fields = ["name", "support_date"]
+        fields = ["name", "serial"]
 
 
 lic_schema = LicSchema()
