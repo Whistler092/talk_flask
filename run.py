@@ -15,7 +15,7 @@ ma.init_app(app)
 def get_lic(serial):
     lic = Lic.query.filter(Lic.serial == serial).first_or_404()
 
-    #return lic_schema.jsonify(lic)
+    # return lic_schema.jsonify(lic)
     return lic_schema_light.jsonify(lic)
 
 
