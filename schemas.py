@@ -18,3 +18,4 @@ class LicSchemaLight(ma.ModelSchema):
 
 lic_schema = LicSchema()
 lic_schema_light = LicSchemaLight()
+lic_schemas = LicSchema(many=True)

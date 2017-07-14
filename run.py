@@ -42,6 +42,37 @@ def create_lic():
     return response
 
 
+@app.route("/<serial>", methods=["PUT"])
+def update_lic(serial):
+    lic = Lic.query.filter(Lic.serial == serial).first_or_404()
+    lic, errors = lic_schema.load(request.json, instance=lic)
+    if errors:
+        resp = jsonify(errors)
+        resp.status_code = 400
+        return resp
+
+    db.session.add(lic)
+    db.session.commit()
+
+    # Return HTTP
+    location = url_for("get_lic", serial=lic.serial)
+    response = jsonify({"message": "Licencia actualizada correctamente"})
+    response.status_code = 201
+    response.headers["Location"] = location
+
+    return response
+
+
+@app.route("/<serial>", methods=["DELETE"])
+def delete_lic(serial):
+    lic = Lic.query.filter(Lic.serial == serial).first_or_404()
+
+    db.session.delete(lic)
+    db.session.commit()
+
+    return jsonify({"message": "Licencia eliminada correctamente"})
+
+
 if __name__ == "__main__":
     if "createdb" in sys.argv:
         with app.app_context():
