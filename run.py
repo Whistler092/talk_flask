@@ -70,6 +70,18 @@ def update_lic():
     return response
 
 
+@app.route("/<serial>", methods=["DELETE"])
+def delete_lic(serial):
+    lic = Lic.query.filter(Lic.serial == serial).first_or_404()
+
+    db.session.delete(lic)
+    db.session.commit()
+
+    response = jsonify({"message": "Licencia eliminada correctamente"})
+    response.status_code = 200
+    return response
+
+
 if __name__ == "__main__":
     if "createdb" in sys.argv:
         with app.app_context():
