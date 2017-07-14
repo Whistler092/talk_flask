@@ -22,7 +22,6 @@ def get_lic(serial):
 @app.route("/", methods=["POST"])
 def create_lic():
     # validamos los campos importantes
-
     if "name" not in request.json:
         return "name required", 400
 
@@ -44,8 +43,8 @@ def create_lic():
     return response
 
 
-@app.route("/", methods=["PUT"])
-def update_lic():
+@app.route("/<serial>", methods=["PUT"])
+def update_lic(serial):
     # validamos los campos importantes
 
     if "name" not in request.json:
@@ -55,7 +54,7 @@ def update_lic():
         return "serial required", 400
 
     # Se crea el objeto Lic
-    lic = Lic.query.filter(Lic.serial == request.json["serial"]).first()
+    lic = Lic.query.filter(Lic.serial == serial).first()
     lic.name = request.json["name"]
 
     db.session.add(lic)
@@ -90,8 +89,7 @@ if __name__ == "__main__":
     elif "loaddata" in sys.argv:
         with app.app_context():
             lic1 = Lic(name='Empresa 1', serial='CYIZ-55IA-TVI8',
-                       status=True, support_date=date(2018, 3, 24)
-                       )
+                       status=True, support_date=date(2018, 3, 24))
             db.session.add(lic1)
 
             lic2 = Lic(name='Empresa 2', serial='W98T-OFKX-QXDF',
