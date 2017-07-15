@@ -1,7 +1,7 @@
-from flask_marshmallow import Marshmallow
-from models import Lic, User
+from app.models.lic import Lic
+from app.models.user import User
 
-ma = Marshmallow()
+from app import ma
 
 
 class UserSchema(ma.ModelSchema):
