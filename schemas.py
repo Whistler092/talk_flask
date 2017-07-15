@@ -1,7 +1,16 @@
 from flask_marshmallow import Marshmallow
-from models import Lic
+from models import Lic, User
 
 ma = Marshmallow()
+
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+        exclude = ["id"]
+
+
+user_schema = UserSchema()
 
 
 class LicSchema(ma.ModelSchema):
